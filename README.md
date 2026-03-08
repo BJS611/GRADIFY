@@ -48,5 +48,5 @@ Server berjalan di `http://localhost:8080`.
 
 - **Backend**: Go (net/http), bcrypt, regexp
 - **Frontend**: HTML, CSS, Vanilla JS
-- **Visualisasi**: Leaflet.js, GeoJSON
+- **Visualisasi**: Leaflet.js, Jestjs.js
 - **Testing**: Go testing + httptest
