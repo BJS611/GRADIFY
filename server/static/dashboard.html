@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Analisis Pendaftar – Nusantara Kreatif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eff6ff;
+            color: #334155;
+            padding: 36px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0d2b5e;
+        }
+
+        .header p {
+            font-size: .83rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            padding: 24px 22px;
+            box-shadow: 0 2px 10px rgba(30, 77, 154, .07);
+        }
+
+        .card-chart {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .card-table {
+            min-width: 230px;
+        }
+
+        .card-pie {
+            min-width: 260px;
+        }
+
+        h2 {
+            font-size: .88rem;
+            font-weight: 600;
+            color: #1a3d7c;
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .83rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 6px 10px;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        td {
+            padding: 8px 10px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .n {
+            font-weight: 700;
+            color: #1e4d9a;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1e4d9a;
+            font-size: .65rem;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 20px;
+            margin-left: 4px;
+        }
+
+        .stat-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 16px;
+            padding: 14px 20px;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat .val {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e4d9a;
+        }
+
+        .stat .lbl {
+            font-size: .72rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Nusantara Kreatif — Analisis Pendaftar per Daerah</h1>
+        <p>Sumber: data pendaftaran siswa baru (25 entri dummy)</p>
+    </div>
+
+    <!-- Stat cards -->
+    <div class="stat-row">
+        <div class="stat">
+            <div class="val">25</div>
+            <div class="lbl">Total Pendaftar</div>
+        </div>
+        <div class="stat">
+            <div class="val">7</div>
+            <div class="lbl">Kota Tercakup</div>
+        </div>
+        <div class="stat">
+            <div class="val">Jakarta</div>
+            <div class="lbl">Daerah Terbanyak</div>
+        </div>
+        <div class="stat">
+            <div class="val">32%</div>
+            <div class="lbl">Proporsi Jakarta</div>
+        </div>
+    </div>
+
+    <div class="grid">
+
+        <!-- Bar chart -->
+        <div class="card card-chart">
+            <h2>Distribusi Pendaftar per Kota</h2>
+            <canvas id="bar-chart"></canvas>
+        </div>
+
+        <!-- Ranking table -->
+        <div class="card card-table">
+            <h2>Ranking Daerah</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Kota</th>
+                        <th>N</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl"></tbody>
+            </table>
+        </div>
+
+        <!-- Pie / Doughnut -->
+        <div class="card card-pie">
+            <h2>Proporsi per Kota</h2>
+            <canvas id="pie-chart"></canvas>
+        </div>
+
+    </div>
+
+    <script>
+        const rows = [
+            { kota: "Jakarta", n: 8 },
+            { kota: "Surabaya", n: 5 },
+            { kota: "Bandung", n: 4 },
+            { kota: "Medan", n: 3 },
+            { kota: "Semarang", n: 2 },
+            { kota: "Makassar", n: 2 },
+            { kota: "Yogyakarta", n: 1 },
+        ];
+
+        const total = rows.reduce((s, r) => s + r.n, 0);
+        const labels = rows.map(r => r.kota);
+        const values = rows.map(r => r.n);
+        const blues = ["#1e3a8a", "#1e4d9a", "#2563b8", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe"];
+
+        // Bar chart
+        new Chart(document.getElementById("bar-chart"), {
+            type: "bar",
+            data: {
+                labels,
+                datasets: [{ label: "Pendaftar", data: values, backgroundColor: blues, borderRadius: 8 }]
+            },
+            options: {
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: "#f1f5f9" } },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Doughnut chart
+        new Chart(document.getElementById("pie-chart"), {
+            type: "doughnut",
+            data: {
+                labels,
+                datasets: [{ data: values, backgroundColor: blues, borderWidth: 2, borderColor: "#fff" }]
+            },
+            options: {
+                plugins: {
+                    legend: { position: "bottom", labels: { font: { size: 11 }, padding: 10 } }
+                }
+            }
+        });
+
+        // Table
+        const tbl = document.getElementById("tbl");
+        rows.forEach((r, i) => {
+            const pct = Math.round(r.n / total * 100);
+            tbl.innerHTML += `<tr>
+        <td class="n">${i + 1}</td>
+        <td>${r.kota}${i === 0 ? '<span class="badge">Terbanyak</span>' : ''}</td>
+        <td class="n">${r.n}</td>
+        <td>${pct}%</td>
+      </tr>`;
+        });
+    </script>
+
+</body>
+
+</html>

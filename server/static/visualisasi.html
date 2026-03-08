@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Choropleth – Pendaftar per Daerah</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #eff6ff;
+            color: #334155;
+        }
+
+        .header {
+            text-align: center;
+            padding: 28px 16px 16px;
+        }
+
+        .header h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #0d2b5e;
+        }
+
+        .header p {
+            font-size: .82rem;
+            color: #64748b;
+            margin-top: 4px;
+        }
+
+        .wrap {
+            display: flex;
+            gap: 20px;
+            padding: 0 24px 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        #map {
+            flex: 1;
+            min-width: 320px;
+            height: 480px;
+            border-radius: 20px;
+            border: 1px solid #dbeafe;
+            box-shadow: 0 2px 10px rgba(30, 77, 154, .08);
+        }
+
+        .side {
+            min-width: 220px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #dbeafe;
+            border-radius: 20px;
+            padding: 20px 18px;
+            box-shadow: 0 2px 8px rgba(30, 77, 154, .06);
+        }
+
+        .card h2 {
+            font-size: .88rem;
+            font-weight: 600;
+            color: #1a3d7c;
+            margin-bottom: 14px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: .8rem;
+            margin-bottom: 7px;
+        }
+
+        .legend-box {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: .82rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 5px 8px;
+            color: #64748b;
+            font-weight: 600;
+            border-bottom: 1px solid #dbeafe;
+        }
+
+        td {
+            padding: 7px 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: #1e4d9a;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1e4d9a;
+            font-size: .65rem;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 20px;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Nusantara Kreatif — Peta Choropleth Pendaftar</h1>
+        <p>Distribusi pendaftar siswa baru berdasarkan provinsi (25 entri dummy)</p>
+    </div>
+    <div class="wrap">
+        <div id="map"></div>
+        <div class="side">
+            <div class="card">
+                <h2>Skala Warna</h2>
+                <div class="legend-item">
+                    <div class="legend-box" style="background:#1e3a8a"></div> 7–8 pendaftar
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background:#1e4d9a"></div> 5–6 pendaftar
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background:#3b82f6"></div> 3–4 pendaftar
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background:#93c5fd"></div> 1–2 pendaftar
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box" style="background:#e2e8f0"></div> Tidak ada data
+                </div>
+            </div>
+            <div class="card">
+                <h2>Ranking Daerah</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Kota</th>
+                            <th>N</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="rank">1</td>
+                            <td>Jakarta <span class="badge">Terbanyak</span></td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">2</td>
+                            <td>Surabaya</td>
+                            <td>5</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">3</td>
+                            <td>Bandung</td>
+                            <td>4</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">4</td>
+                            <td>Medan</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">5</td>
+                            <td>Semarang</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">5</td>
+                            <td>Makassar</td>
+                            <td>2</td>
+                        </tr>
+                        <tr>
+                            <td class="rank">7</td>
+                            <td>Yogyakarta</td>
+                            <td>1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const counts = {
+            "DKI Jakarta": 8, "Jawa Timur": 5, "Jawa Barat": 4,
+            "Sumatera Utara": 3, "Jawa Tengah": 2, "Sulawesi Selatan": 2, "DI Yogyakarta": 1
+        };
+
+        function color(n) {
+            if (!n) return "#e2e8f0";
+            if (n >= 7) return "#1e3a8a";
+            if (n >= 5) return "#1e4d9a";
+            if (n >= 3) return "#3b82f6";
+            return "#93c5fd";
+        }
+
+        // Simplified GeoJSON — koordinat approx tiap provinsi
+        const geojson = {
+            type: "FeatureCollection",
+            features: [
+                { type: "Feature", properties: { name: "DKI Jakarta" }, geometry: { type: "Polygon", coordinates: [[[106.68, -6.13], [107.0, -6.13], [107.0, -6.38], [106.68, -6.38], [106.68, -6.13]]] } },
+                { type: "Feature", properties: { name: "Jawa Timur" }, geometry: { type: "Polygon", coordinates: [[[111.0, -7.0], [114.5, -7.0], [114.5, -8.8], [111.0, -8.8], [111.0, -7.0]]] } },
+                { type: "Feature", properties: { name: "Jawa Barat" }, geometry: { type: "Polygon", coordinates: [[[106.4, -6.2], [109.0, -6.2], [109.0, -7.8], [106.4, -7.8], [106.4, -6.2]]] } },
+                { type: "Feature", properties: { name: "Sumatera Utara" }, geometry: { type: "Polygon", coordinates: [[[97.5, 1.7], [100.0, 1.7], [100.0, 4.5], [97.5, 4.5], [97.5, 1.7]]] } },
+                { type: "Feature", properties: { name: "Jawa Tengah" }, geometry: { type: "Polygon", coordinates: [[[108.5, -6.5], [111.5, -6.5], [111.5, -8.0], [108.5, -8.0], [108.5, -6.5]]] } },
+                { type: "Feature", properties: { name: "Sulawesi Selatan" }, geometry: { type: "Polygon", coordinates: [[[119.5, -2.5], [121.0, -2.5], [121.0, -6.0], [119.5, -6.0], [119.5, -2.5]]] } },
+                { type: "Feature", properties: { name: "DI Yogyakarta" }, geometry: { type: "Polygon", coordinates: [[[110.0, -7.6], [110.6, -7.6], [110.6, -8.1], [110.0, -8.1], [110.0, -7.6]]] } },
+            ]
+        };
+
+        const map = L.map("map").setView([-2.5, 118], 4);
+
+        L.tileLayer("https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png", {
+            attribution: "© OpenStreetMap © CARTO"
+        }).addTo(map);
+
+        L.geoJSON(geojson, {
+            style(f) {
+                const n = counts[f.properties.name] || 0;
+                return { fillColor: color(n), fillOpacity: 0.85, color: "#fff", weight: 1.5 };
+            },
+            onEachFeature(f, layer) {
+                const n = counts[f.properties.name] || 0;
+                layer.bindTooltip(`<strong>${f.properties.name}</strong><br>${n ? n + " pendaftar" : "Tidak ada data"}`, { sticky: true });
+                layer.on("mouseover", e => e.target.setStyle({ weight: 2.5, color: "#0d2b5e" }));
+                layer.on("mouseout", e => e.target.setStyle({ weight: 1.5, color: "#fff" }));
+            }
+        }).addTo(map);
+    </script>
+</body>
+
+</html>

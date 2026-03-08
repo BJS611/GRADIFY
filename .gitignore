@@ -1,0 +1,12 @@
+# binaries / built
+server/server
+
+# Go module cache
+*.test
+*.out
+
+# OS & editor
+.DS_Store
+.idea/
+.vscode/
+*.swp

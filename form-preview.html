@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nusantara Kreatif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --blue-900: #0d2b5e;
+            --blue-800: #1a3d7c;
+            --blue-700: #1e4d9a;
+            --blue-600: #2563b8;
+            --blue-500: #3b82d4;
+            --blue-400: #60a5e8;
+            --blue-100: #dbeafe;
+            --blue-50: #eff6ff;
+            --white: #ffffff;
+            --gray-100: #f1f5f9;
+            --gray-300: #cbd5e1;
+            --gray-500: #64748b;
+            --gray-700: #334155;
+            --red-500: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--blue-50);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 16px;
+            color: var(--gray-700);
+        }
+
+        /* ── Header / Brand ── */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 36px;
+        }
+
+        .brand-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--blue-700);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .brand-icon svg {
+            fill: #fff;
+        }
+
+        .brand-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--blue-900);
+        }
+
+        .brand-name span {
+            color: var(--blue-600);
+        }
+
+        /* ── Tab switcher ── */
+        .tabs {
+            display: flex;
+            background: var(--white);
+            border: 1px solid var(--blue-100);
+            border-radius: 10px;
+            padding: 4px;
+            gap: 4px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 9px 28px;
+            border: none;
+            border-radius: 7px;
+            font-family: inherit;
+            font-size: .9rem;
+            font-weight: 500;
+            cursor: pointer;
+            background: transparent;
+            color: var(--gray-500);
+            transition: background .2s, color .2s;
+        }
+
+        .tab-btn.active {
+            background: var(--blue-700);
+            color: var(--white);
+        }
+
+        .card {
+            background: var(--white);
+            border: 1px solid var(--blue-100);
+            border-radius: 20px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 2px 12px rgba(30, 77, 154, .08);
+        }
+
+        .card h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--blue-900);
+            margin-bottom: 4px;
+        }
+
+        .card .sub {
+            font-size: .85rem;
+            color: var(--gray-500);
+            margin-bottom: 28px;
+        }
+
+        .field {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: .82rem;
+            font-weight: 600;
+            color: var(--blue-800);
+            margin-bottom: 6px;
+        }
+
+        label .req {
+            color: var(--red-500);
+            margin-left: 2px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid var(--blue-100);
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: .9rem;
+            color: var(--gray-700);
+            background: var(--white);
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--blue-600);
+            box-shadow: 0 0 0 3px rgba(37, 99, 184, .15);
+        }
+
+        .hint {
+            font-size: .75rem;
+            color: var(--gray-500);
+            margin-top: 4px;
+        }
+
+        .hint.error {
+            color: var(--red-500);
+        }
+
+        .pw-wrap {
+            position: relative;
+        }
+
+        .pw-wrap input {
+            padding-right: 42px;
+        }
+
+        .pw-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+
+        .pw-toggle:hover {
+            color: #64748b;
+        }
+
+        /* submit */
+        .btn-primary {
+            width: 100%;
+            padding: 11px;
+            background: var(--blue-700);
+            color: var(--white);
+            border: none;
+            border-radius: 16px;
+            font-family: inherit;
+            font-size: .95rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 6px;
+            transition: background .2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--blue-800);
+        }
+
+        /* divider */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 22px 0;
+            font-size: .78rem;
+            color: var(--gray-500);
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--blue-100);
+        }
+
+        /* link */
+        .text-link {
+            color: var(--blue-600);
+            font-weight: 500;
+            text-decoration: none;
+            font-size: .85rem;
+        }
+
+        .text-link:hover {
+            text-decoration: underline;
+        }
+
+        .center {
+            text-align: center;
+            margin-top: 16px;
+            font-size: .85rem;
+        }
+
+        /* inline row */
+        .row {
+            display: flex;
+            gap: 14px;
+        }
+
+        .row .field {
+            flex: 1;
+        }
+
+        /* checkbox */
+        .check-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-size: .83rem;
+            color: var(--gray-500);
+            margin-bottom: 18px;
+        }
+
+        .check-group input[type="checkbox"] {
+            margin-top: 2px;
+            accent-color: var(--blue-700);
+        }
+
+        /* hidden */
+        .pane {
+            display: none;
+        }
+
+        .pane.active {
+            display: block;
+        }
+
+        /* preview badge */
+        .badge {
+            background: var(--blue-100);
+            color: var(--blue-800);
+            font-size: .72rem;
+            font-weight: 600;
+            letter-spacing: .05em;
+            padding: 3px 10px;
+            border-radius: 20px;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+        }
+
+        /* strength meter */
+        .strength-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .strength-bar span {
+            flex: 1;
+            height: 4px;
+            border-radius: 4px;
+            background: var(--gray-300);
+        }
+
+        .strength-bar.s1 span:nth-child(1) {
+            background: var(--red-500);
+        }
+
+        .strength-bar.s2 span:nth-child(1),
+        .strength-bar.s2 span:nth-child(2) {
+            background: #f59e0b;
+        }
+
+        .strength-bar.s3 span {
+            background: #22c55e;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Brand -->
+    <div class="brand">
+        <div class="brand-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z" />
+            </svg>
+        </div>
+        <div class="brand-name">Nusantara <span>Kreatif</span></div>
+    </div>
+
+
+
+    <!-- Tab switcher -->
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('login')">Masuk</button>
+        <button class="tab-btn" onclick="switchTab('register')">Daftar</button>
+    </div>
+
+    <!-- ════════════ LOGIN ════════════ -->
+    <div class="card">
+
+        <!-- LOGIN PANE -->
+        <div id="pane-login" class="pane active">
+            <h2>Selamat Datang Kembali</h2>
+            <p class="sub">Masuk ke akun e-learning Anda</p>
+
+            <div class="field">
+                <label for="l-email">Email <span class="req">*</span></label>
+                <input type="email" id="l-email" placeholder="nama@email.com" autocomplete="email" />
+                <p class="hint">Format: nama@domain.com</p>
+            </div>
+
+            <div class="field">
+                <label for="l-pass">Kata Sandi <span class="req">*</span></label>
+                <div class="pw-wrap">
+                    <input type="password" id="l-pass" placeholder="Masukkan kata sandi" />
+                    <button class="pw-toggle" type="button" onclick="togglePw('l-pass', this)"
+                        aria-label="Toggle password">
+                        <svg id="eye-l-pass" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div style="text-align:right; margin-bottom:18px;">
+                <a href="#" class="text-link">Lupa kata sandi?</a>
+            </div>
+
+            <button class="btn-primary" type="button">Masuk</button>
+
+            <div class="divider">atau</div>
+
+            <div class="center">
+                Belum punya akun? <a href="#" class="text-link" onclick="switchTab('register'); return false;">Daftar
+                    sekarang</a>
+            </div>
+        </div>
+
+        <!-- REGISTER PANE -->
+        <div id="pane-register" class="pane">
+            <h2>Buat Akun Baru</h2>
+            <p class="sub">Isi data berikut untuk mendaftar sebagai siswa</p>
+
+            <div class="row">
+                <div class="field">
+                    <label for="r-fname">Nama Depan <span class="req">*</span></label>
+                    <input type="text" id="r-fname" placeholder="Budi" />
+                </div>
+                <div class="field">
+                    <label for="r-lname">Nama Belakang</label>
+                    <input type="text" id="r-lname" placeholder="Santoso" />
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="r-email">Email <span class="req">*</span></label>
+                <input type="email" id="r-email" placeholder="budi@email.com" autocomplete="email"
+                    oninput="validateEmail(this)" />
+                <p class="hint" id="email-hint">Format: nama@domain.com</p>
+            </div>
+
+            <div class="field">
+                <label for="r-phone">Nomor Telepon <span class="req">*</span></label>
+                <input type="tel" id="r-phone" placeholder="08xxxxxxxxxx"
+                    oninput="this.value=this.value.replace(/[^0-9]/,'')" maxlength="14" />
+                <p class="hint">Contoh: 081234567890</p>
+            </div>
+
+            <div class="field">
+                <label for="r-alamat">Alamat Lengkap <span class="req">*</span></label>
+                <input type="text" id="r-alamat" placeholder="Jl. Sudirman No. 1, Jakarta" />
+                <p class="hint">Alamat domisili saat ini</p>
+            </div>
+
+            <div class="field">
+                <label for="r-pass">Kata Sandi <span class="req">*</span></label>
+                <div class="pw-wrap">
+                    <input type="password" id="r-pass" placeholder="Min. 8 karakter" oninput="checkStrength(this)" />
+                    <button class="pw-toggle" type="button" onclick="togglePw('r-pass', this)"
+                        aria-label="Toggle password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="strength-bar" id="strength-bar">
+                    <span></span><span></span><span></span>
+                </div>
+                <p class="hint" id="strength-label">Gunakan minimal 8 karakter, huruf & angka</p>
+            </div>
+
+            <div class="field">
+                <label for="r-pass2">Konfirmasi Kata Sandi <span class="req">*</span></label>
+                <div class="pw-wrap">
+                    <input type="password" id="r-pass2" placeholder="Ulangi kata sandi" oninput="checkMatch(this)" />
+                    <button class="pw-toggle" type="button" onclick="togglePw('r-pass2', this)"
+                        aria-label="Toggle password">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="hint" id="match-hint"></p>
+            </div>
+
+            <div class="check-group">
+                <input type="checkbox" id="r-terms" />
+                <label for="r-terms" style="font-weight:400; font-size:.83rem; color:var(--gray-500); margin-bottom:0;">
+                    Saya menyetujui <a href="#" class="text-link">Syarat &amp; Ketentuan</a> dan
+                    <a href="#" class="text-link">Kebijakan Privasi</a>
+                </label>
+            </div>
+
+            <button class="btn-primary" type="button">Daftar Sekarang</button>
+
+            <div class="center">
+                Sudah punya akun? <a href="#" class="text-link" onclick="switchTab('login'); return false;">Masuk</a>
+            </div>
+        </div>
+
+    </div><!-- /card -->
+
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach((b, i) => {
+                b.classList.toggle('active', (i === 0 && tab === 'login') || (i === 1 && tab === 'register'));
+            });
+            document.getElementById('pane-login').classList.toggle('active', tab === 'login');
+            document.getElementById('pane-register').classList.toggle('active', tab === 'register');
+        }
+
+        const eyeOpen = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        const eyeOff = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+        function togglePw(id, btn) {
+            const inp = document.getElementById(id);
+            if (inp.type === 'password') { inp.type = 'text'; btn.innerHTML = eyeOff; }
+            else { inp.type = 'password'; btn.innerHTML = eyeOpen; }
+        }
+
+        function validateEmail(inp) {
+            const hint = document.getElementById('email-hint');
+            const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inp.value);
+            if (!inp.value) { hint.textContent = 'Format: nama@domain.com'; hint.className = 'hint'; return; }
+            if (ok) { hint.textContent = '✓ Email valid'; hint.className = 'hint'; }
+            else { hint.textContent = '✗ Format email tidak valid'; hint.className = 'hint error'; }
+        }
+
+        function checkStrength(inp) {
+            const v = inp.value;
+            const bar = document.getElementById('strength-bar');
+            const label = document.getElementById('strength-label');
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[A-Z]/.test(v) && /[a-z]/.test(v)) score++;
+            if (/[0-9]/.test(v) || /[^A-Za-z0-9]/.test(v)) score++;
+            bar.className = 'strength-bar' + (score ? ' s' + score : '');
+            const labels = ['', 'Lemah', 'Sedang', 'Kuat'];
+            label.textContent = score ? 'Kekuatan kata sandi: ' + labels[score] : 'Gunakan minimal 8 karakter, huruf & angka';
+        }
+
+        function checkMatch(inp) {
+            const pass = document.getElementById('r-pass').value;
+            const hint = document.getElementById('match-hint');
+            if (!inp.value) { hint.textContent = ''; return; }
+            if (inp.value === pass) { hint.textContent = '✓ Kata sandi cocok'; hint.className = 'hint'; }
+            else { hint.textContent = '✗ Kata sandi tidak cocok'; hint.className = 'hint error'; }
+        }
+    </script>
+</body>
+
+</html>

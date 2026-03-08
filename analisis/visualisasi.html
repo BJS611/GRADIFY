@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Choropleth Pendaftar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            margin: 0;
+            color: #0f172a;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+            flex-wrap: wrap;
+        }
+
+        #map {
+            flex: 1;
+            min-width: 300px;
+            height: 500px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            background: #e2e8f0;
+        }
+
+        .panel {
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+        }
+
+        .card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1rem;
+            color: #334155;
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 0.85rem;
+        }
+
+        .box {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        th {
+            color: #64748b;
+            font-weight: 600;
+        }
+
+        .badge {
+            background: #dbeafe;
+            color: #1d4ed8;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>Distribusi Pendaftar per Daerah</h1>
+        <p>Data Pendaftar Nusantara Kreatif (25 Sampel)</p>
+    </div>
+    <div class="container">
+        <div id="map"></div>
+        <div class="panel">
+            <div class="card legend">
+                <h3>Skala Pendaftar</h3>
+                <div>
+                    <div class="box" style="background:#1e3a8a"></div> 7+ pendaftar
+                </div>
+                <div>
+                    <div class="box" style="background:#1d4ed8"></div> 5-6 pendaftar
+                </div>
+                <div>
+                    <div class="box" style="background:#3b82f6"></div> 3-4 pendaftar
+                </div>
+                <div>
+                    <div class="box" style="background:#93c5fd"></div> 1-2 pendaftar
+                </div>
+                <div>
+                    <div class="box" style="background:#cbd5e1"></div> 0 pendaftar
+                </div>
+            </div>
+            <div class="card">
+                <h3>Top Kota</h3>
+                <table>
+                    <tr>
+                        <th>Kota</th>
+                        <th>Jumlah</th>
+                    </tr>
+                    <tr>
+                        <td>Jakarta <span class="badge">#1</span></td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>Surabaya</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>Bandung</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>Medan</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Semarang</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Makassar</td>
+                        <td>2</td>
+                    </tr>
+                    <tr>
+                        <td>Yogyakarta</td>
+                        <td>1</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const stats = { "DKI Jakarta": 8, "Jawa Timur": 5, "Jawa Barat": 4, "Sumatera Utara": 3, "Jawa Tengah": 2, "Sulawesi Selatan": 2, "DI Yogyakarta": 1 };
+        const c = n => n >= 7 ? "#1e3a8a" : n >= 5 ? "#1d4ed8" : n >= 3 ? "#3b82f6" : n >= 1 ? "#93c5fd" : "#cbd5e1";
+
+        const m = L.map('map').setView([-2.5, 118], 5);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png').addTo(m);
+
+        fetch("https://raw.githubusercontent.com/superpikar/indonesia-geojson/master/indonesia-province-simple.json")
+            .then(r => r.json())
+            .then(g => {
+                L.geoJSON(g, {
+                    style: f => ({ fillColor: c(stats[f.properties.Propinsi] || 0), fillOpacity: .8, color: "white", weight: 1 }),
+                    onEachFeature: (f, l) => {
+                        const v = stats[f.properties.Propinsi] || 0;
+                        l.bindTooltip(`<b>${f.properties.Propinsi}</b><br>${v} Pendaftar`);
+                        l.on('mouseover', e => e.target.setStyle({ weight: 2, color: '#1e3a8a' }));
+                        l.on('mouseout', e => e.target.setStyle({ weight: 1, color: 'white' }));
+                    }
+                }).addTo(m);
+            }).catch(() => document.getElementById('map').innerHTML = '<p align="center">Gagal load peta.</p>');
+    </script>
+</body>
+
+</html>
