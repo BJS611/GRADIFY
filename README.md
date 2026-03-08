@@ -1,6 +1,6 @@
 # GRADIFY
 
-Proyek e-learning **Nusantara Kreatif** — portofolio studi kasus pengembangan platform pendaftaran siswa.
+Proyek e-learning **Nusantara Kreatif** merupakan portofolio studi kasus pengembangan platform pendaftaran siswa.
 
 ## Struktur
 
